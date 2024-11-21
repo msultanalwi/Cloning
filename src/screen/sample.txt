@@ -1,0 +1,100 @@
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+} from 'react-native';
+import HeaderCustom from '../components/HeaderCustom';
+
+const Todo = () => {
+  const [activity, setActivity] = useState('');
+
+  const [dataActivty, setDataActivity] = useState(['mandi pagi', 'sarapan']);
+
+  const onSubmit = () => {
+    //set nilai baru ke data activity : data activity + activity
+    if (activity == '') {
+      return Alert.alert('Aktifitas tidak boleh kosong');
+    }
+    setDataActivity([...dataActivty, activity]);
+    setActivity('');
+  };
+
+  const onDelete = itemKey => {
+    // Alert.alert(key.toString())
+
+    setDataActivity(dataActivty.filter((value, key) => key != itemKey));
+  };
+
+  return (
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      {/* Header */}
+      <HeaderCustom title="To Do List" headerColor="teal" />
+      {/* List */}
+      <View style={{flex: 1}}>
+        <ScrollView>
+          {dataActivty.map((value, key) => {
+            return (
+              <View
+                key={key}
+                style={{
+                  height: 50,
+                  width: '100%',
+                  backgroundColor: 'white',
+                  elevation: 5,
+                  marginBottom: 8,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 12,
+                  flexDirection: 'row',
+                }}>
+                <Text style={{color: 'black'}}>{value}</Text>
+                <Text style={{color: 'red'}} onPress={() => onDelete(key)}>
+                  DELETE
+                </Text>
+              </View>
+            );
+          })}
+        </ScrollView>
+      </View>
+      {/* Input Box */}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 12,
+          borderTopWidth: 0.5,
+          borderColor: 'gray',
+        }}>
+        {/* Input to do */}
+        <TextInput
+          placeholder="Masukkan aktifitas"
+          placeholderTextColor={'gray'}
+          style={{color: 'black'}}
+          value={activity}
+          onChangeText={text => setActivity(text)}
+        />
+
+        {/* Button Send */}
+        <TouchableOpacity
+          style={{
+            height: 45,
+            width: 100,
+            backgroundColor: 'teal',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 5,
+          }}
+          onPress={() => onSubmit()}>
+          <Text style={{color: 'white'}}>Submit</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default Todo;
